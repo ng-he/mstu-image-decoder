@@ -1,0 +1,19 @@
+[package]
+name = "mstu-image-decoder"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Decode, scale and the jpeg encode, all from libav. No capture devices and no
+# filters, so a build needs neither libavdevice nor libavfilter.
+ffmpeg-next = { version = "7.1", default-features = false, features = [
+    "codec",
+    "format",
+    "software-scaling",
+] }
+
+mstu-media = "0.1"
+mstu-sdk = "0.1"

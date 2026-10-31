@@ -1,0 +1,2 @@
+ffmpeg-sys-next looks for libav of the target it is checking, which a linux
+box has only for linux. The center repo's windows check skips this plugin.

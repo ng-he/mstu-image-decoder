@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Image decoder</title>
+    <link rel="stylesheet" href="./_sdk/mstu.css" />
+    <style>
+      .grid {
+        display: grid;
+        grid-template-columns: auto 1fr auto 1fr;
+        align-items: center;
+        gap: 6px 8px;
+        margin-top: 8px;
+      }
+
+      .grid label {
+        font-size: 10px;
+        color: var(--mstu-text-dim);
+        white-space: nowrap;
+      }
+
+      .grid input {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .wide {
+        grid-column: span 3;
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 10px;
+      }
+
+      .toggle {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 10px;
+        color: var(--mstu-text-dim);
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .toggle input {
+        margin: 0;
+        accent-color: var(--mstu-accent);
+      }
+
+      /* The counters move, so they get the mono face and fixed digits. */
+      .counts {
+        margin-top: 8px;
+        font-family: var(--mstu-mono);
+        font-size: 10px;
+        font-variant-numeric: tabular-nums;
+        color: var(--mstu-text-faint);
+      }
+
+      .counts b {
+        font-weight: normal;
+        color: var(--mstu-text-dim);
+      }
+
+      .why {
+        margin-top: 6px;
+        font-size: 10px;
+        line-height: 1.4;
+        color: var(--mstu-warn, #d08770);
+      }
+
+      .why[hidden] {
+        display: none;
+      }
+
+      /* The latest image, which the host serves from the file the plugin
+         keeps. Sized by the box, never taller than it is wide. */
+      .shot {
+        display: block;
+        width: 100%;
+        margin-top: 8px;
+        border-radius: 3px;
+        background: var(--mstu-bg-input);
+        image-rendering: auto;
+      }
+
+      .shot[hidden] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mstu-label">Images</div>
+
+    <div class="grid">
+      <label for="width">width</label>
+      <input class="mstu-input" id="width" type="number" min="0" step="2" placeholder="source" />
+
+      <label for="height">height</label>
+      <input class="mstu-input" id="height" type="number" min="0" step="2" placeholder="auto" />
+
+      <label for="quality">quality</label>
+      <input class="mstu-input" id="quality" type="number" min="1" max="100" />
+
+      <label for="rate">per second</label>
+      <input class="mstu-input" id="rate" type="number" min="0" step="0.5" placeholder="every" />
+
+      <label for="change">min change %</label>
+      <input class="mstu-input" id="change" type="number" min="0" max="100" />
+
+      <label for="heartbeat">heartbeat s</label>
+      <input class="mstu-input" id="heartbeat" type="number" min="0" />
+    </div>
+
+    <div class="row">
+      <label class="toggle"><input type="checkbox" id="keys" /> key frames only</label>
+
+      <label class="toggle"><input type="checkbox" id="preview" checked /> preview</label>
+
+      <select class="mstu-select" id="decoder" title="Which decoder to use">
+        <option value="auto">auto</option>
+        <option value="software">software</option>
+      </select>
+    </div>
+
+    <div class="mstu-meta">
+      <span class="mstu-chip" id="codec" hidden></span>
+      <span class="mstu-dim" id="shape">nothing decoded yet</span>
+    </div>
+
+    <img class="shot" id="shot" alt="the latest image" hidden />
+
+    <div class="counts">
+      <b id="images">0</b> images · <b id="fps">0</b>/s · <span id="skipped"></span>
+    </div>
+
+    <div class="why" id="note" hidden></div>
+
+    <div class="mstu-status">
+      <span class="mstu-dot" id="dot"></span>
+      <span id="state">idle</span>
+      <span class="mstu-count" id="frames">0</span>
+    </div>
+
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>
