@@ -37,6 +37,16 @@ apt install libavcodec-dev libavformat-dev libswscale-dev   # debian, ubuntu
 center repository stays green. An LGPL build is enough: the decoders are in
 libavcodec itself, and x264 and x265 are encoders this does not use.
 
+On Windows there is nothing to apt install. `ffmpeg-sys-next` builds against
+whatever `FFMPEG_DIR` points at -- a prebuilt shared release, with its
+`include/` and `lib/`-- or against vcpkg's ffmpeg if that is installed; to run,
+the five DLLs it links (`avcodec`, `avformat`, `avutil`, `swscale`, and
+`swresample`, which avcodec itself needs) go in `dist/` here, and `collect.sh`
+puts them beside this plugin where the engine adds them to the search path. A
+cross check from Linux cannot work for this one -- the build script's vcpkg
+branch is compiled out off a Windows host, leaving pkg-config to look for a
+Linux libav -- which is what the `.no-windows-check` beside it says.
+
 ## How it is put together
 
 `images.rs` holds the seam: **frames in, JPEG out, one backend behind it**. The
